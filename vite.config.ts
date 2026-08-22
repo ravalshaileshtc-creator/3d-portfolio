@@ -4,6 +4,7 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  base: './', // Ensures relative assets work seamlessly on GitHub Pages subfolder deployments
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
