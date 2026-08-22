@@ -4,18 +4,27 @@ import { PERSONAL_INFO } from '../data/portfolioData';
 
 export const AboutCredentials: React.FC = () => {
   const [istTime, setIstTime] = useState<string>('');
+  const [istDate, setIstDate] = useState<string>('');
 
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
-      const options: Intl.DateTimeFormatOptions = {
+      const timeOptions: Intl.DateTimeFormatOptions = {
         timeZone: 'Asia/Kolkata',
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
         hour12: true,
       };
-      setIstTime(now.toLocaleTimeString('en-US', options));
+      const dateOptions: Intl.DateTimeFormatOptions = {
+        timeZone: 'Asia/Kolkata',
+        weekday: 'short',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      };
+      setIstTime(now.toLocaleTimeString('en-US', timeOptions));
+      setIstDate(now.toLocaleDateString('en-US', dateOptions));
     };
 
     updateTime();
@@ -85,13 +94,17 @@ export const AboutCredentials: React.FC = () => {
                 <span>GUJARAT, INDIA (IST TIMEZONE)</span>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold font-mono text-gradient-cyan tracking-tight py-2">
-                {istTime || '10:45:00 PM'}
+              <div className="text-4xl sm:text-5xl font-extrabold font-mono text-gradient-cyan tracking-tight py-1">
+                {istTime || '10:55:00 PM'}
+              </div>
+
+              <div className="text-xs font-mono text-[#b4c5ff] font-semibold tracking-wider">
+                {istDate || 'Sat, 22 Aug 2026'} • IST (UTC+05:30)
               </div>
 
               <div className="flex items-center justify-center gap-2 text-xs text-slate-400">
                 <MapPin className="w-4 h-4 text-[#ffb596]" />
-                <span>UTC +05:30 (Indian Standard Time)</span>
+                <span>Gujarat, India • Real-Time High Precision Sync</span>
               </div>
 
               <div className="pt-4 border-t border-white/10 flex items-center justify-center gap-3 text-xs text-emerald-400 font-mono">

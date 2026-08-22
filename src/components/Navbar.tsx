@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, FileText, Menu, X, Sparkles, Code2, Sun, Moon } from 'lucide-react';
+import { Phone, FileText, Menu, X, Sparkles, Code2, Sun, Moon, Clock } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 
 interface NavbarProps {
@@ -11,13 +11,33 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenResume, theme = 'dark', onToggleTheme }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [istTime, setIstTime] = useState<string>('');
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    const updateTime = () => {
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = {
+        timeZone: 'Asia/Kolkata',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      };
+      setIstTime(now.toLocaleTimeString('en-US', options));
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearInterval(interval);
+    };
   }, []);
 
   const navLinks = [
@@ -76,6 +96,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume, theme = 'dark', on
 
         {/* Action Buttons */}
         <div className="hidden md:flex items-center gap-3">
+          {/* Live IST Time Badge */}
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#4cd7f6]/30 bg-[#11131b]/80 text-[11px] font-mono text-[#4cd7f6] shadow-sm">
+            <Clock className="w-3.5 h-3.5 text-[#4cd7f6] animate-pulse" />
+            <span>{istTime || 'IST'}</span>
+          </div>
+
           {/* Theme Toggle Button */}
           {onToggleTheme && (
             <button
