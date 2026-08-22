@@ -17,10 +17,14 @@ export const ScrollFrameBackground: React.FC = () => {
     const loadedImages: HTMLImageElement[] = [];
     let count = 0;
 
+    const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+      ? import.meta.env.BASE_URL
+      : `${import.meta.env.BASE_URL}/`;
+
     for (let i = 1; i <= FRAME_COUNT; i++) {
       const img = new Image();
       const frameNumber = String(i).padStart(4, '0');
-      img.src = `/frames/frame_${frameNumber}.jpg`;
+      img.src = `${baseUrl}frames/frame_${frameNumber}.jpg`;
       
       img.onload = () => {
         if (!mounted) return;
