@@ -24,7 +24,10 @@ export const ScrollFrameBackground: React.FC = () => {
     for (let i = 1; i <= FRAME_COUNT; i++) {
       const img = new Image();
       const frameNumber = String(i).padStart(4, '0');
-      img.src = `${baseUrl}frames/frame_${frameNumber}.jpg`;
+      const primaryUrl = `${baseUrl}frames/frame_${frameNumber}.jpg`;
+      const fallbackUrl = `./frames/frame_${frameNumber}.jpg`;
+      
+      img.src = primaryUrl;
       
       img.onload = () => {
         if (!mounted) return;
@@ -36,6 +39,11 @@ export const ScrollFrameBackground: React.FC = () => {
       };
 
       img.onerror = () => {
+        // Fallback to relative path if primary URL fails
+        if (img.src !== fallbackUrl) {
+          img.src = fallbackUrl;
+          return;
+        }
         if (!mounted) return;
         count++;
         setLoadedCount(count);
@@ -82,21 +90,26 @@ export const ScrollFrameBackground: React.FC = () => {
     if (!ctx) return;
 
     const render = () => {
+      // Ensure canvas size always matches window viewport
+      if (canvas.width !== window.innerWidth || canvas.height !== window.innerHeight) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
       // Lerp frame target for 60 FPS fluid scrub
-      currentFrameRef.current += (targetFrameRef.current - currentFrameRef.current) * 0.12;
+      currentFrameRef.current += (targetFrameRef.current - currentFrameRef.current) * 0.15;
       const frameIndex = Math.min(
         FRAME_COUNT - 1,
         Math.max(0, Math.round(currentFrameRef.current))
       );
 
-      const img = imagesRef.current[frameIndex];
+      const img = imagesRef.current[frameIndex] || imagesRef.current[0];
 
-      if (img && img.complete && img.naturalWidth > 0) {
-        // Handle cover object-fit calculation
+      if (img && (img.complete || img.naturalWidth > 0)) {
         const cw = canvas.width;
         const ch = canvas.height;
-        const iw = img.naturalWidth;
-        const ih = img.naturalHeight;
+        const iw = img.naturalWidth || 1920;
+        const ih = img.naturalHeight || 1080;
 
         const scale = Math.max(cw / iw, ch / ih);
         const nw = iw * scale;

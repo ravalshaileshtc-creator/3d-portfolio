@@ -18,7 +18,7 @@ export const App: React.FC = () => {
   const [resumeOpen, setResumeOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen text-slate-100 bg-[#11131b] selection:bg-[#4cd7f6]/30 selection:text-[#4cd7f6]">
+    <div className="relative min-h-screen text-slate-100 bg-transparent selection:bg-[#4cd7f6]/30 selection:text-[#4cd7f6]">
       {/* 30-Frame Scroll-Driven Canvas Animation Background */}
       <ScrollFrameBackground />
 
