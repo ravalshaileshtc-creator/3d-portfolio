@@ -129,19 +129,19 @@ export const ScrollFrameBackground: React.FC = () => {
         cancelAnimationFrame(animFrameIdRef.current);
       }
     };
-  }, [isLoaded]);
+  }, []);
 
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#11131b]">
       {/* Background Frame Sequence Canvas */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
-        style={{ opacity: isLoaded ? 0.75 : 0.2 }}
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+        style={{ opacity: 0.85 }}
       />
 
-      {/* Cyberpunk Glass Radial Overlay for Crisp Contrast */}
-      <div className="absolute inset-0 bg-radial-vignette bg-gradient-to-b from-[#11131b]/80 via-[#11131b]/60 to-[#11131b]/95 backdrop-blur-[2px]" />
+      {/* Subtle Ambient Radial Vignette to keep text readable without blocking background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#11131b]/50 via-transparent to-[#11131b]/70 pointer-events-none" />
 
       {/* Cyan & Purple Glowing Orbs */}
       <div className="absolute top-1/4 -left-32 w-96 h-96 bg-[#4cd7f6]/15 rounded-full blur-[120px] animate-pulse-slow pointer-events-none" />
