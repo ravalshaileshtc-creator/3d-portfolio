@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ScrollFrameBackground } from './components/ScrollFrameBackground';
+import { CyberShaderBackground } from './components/CyberShaderBackground';
 import { Navbar } from './components/Navbar';
 import { Hero3D } from './components/Hero3D';
 import { KeyStats } from './components/KeyStats';
@@ -21,6 +22,9 @@ export const App: React.FC = () => {
     <div className="relative min-h-screen text-slate-100 bg-transparent selection:bg-[#4cd7f6]/30 selection:text-[#4cd7f6]">
       {/* 30-Frame Scroll-Driven Canvas Animation Background */}
       <ScrollFrameBackground />
+
+      {/* Cyber GLSL Particle & Grid Shader Overlay */}
+      <CyberShaderBackground />
 
       {/* Navigation Header */}
       <Navbar onOpenResume={() => setResumeOpen(true)} />
