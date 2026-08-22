@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const FRAME_COUNT = 30;
+const FRAME_COUNT = 101;
 
 export const ScrollFrameBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
