@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, RoundedBox, PerspectiveCamera, OrbitControls } from '@react-three/drei';
+import { Float, RoundedBox, PerspectiveCamera } from '@react-three/drei';
 import * as THREE from 'three';
-import { CheckCircle2, ArrowRight, Download, Phone, Sparkles, Layers, ShieldCheck, Cpu } from 'lucide-react';
+import { CheckCircle2, ArrowRight, Download, Phone, Sparkles, Cpu, Layers, ShieldCheck } from 'lucide-react';
 import { PERSONAL_INFO, CORE_STACK_LOGOS } from '../data/portfolioData';
 
 interface Hero3DProps {
@@ -100,89 +100,71 @@ function useAnimatedCanvasTexture() {
   return texture;
 }
 
-// 3D Scene containing Laptop & Smartphone
+// 3D Devices Scene
 function DevicesScene({ mouse }: { mouse: React.MutableRefObject<{ x: number; y: number }> }) {
   const groupRef = useRef<THREE.Group>(null);
-  const screenTex = useAnimatedCanvasTexture();
+  const laptopRef = useRef<THREE.Group>(null);
+  const phoneRef = useRef<THREE.Group>(null);
+  const screenTexture = useAnimatedCanvasTexture();
 
-  useFrame(() => {
-    if (!groupRef.current) return;
-    // Damped mouse rotation
-    const targetRotX = mouse.current.y * 0.15;
-    const targetRotY = mouse.current.x * 0.2;
-    groupRef.current.rotation.x += (targetRotX - groupRef.current.rotation.x) * 0.05;
-    groupRef.current.rotation.y += (targetRotY - groupRef.current.rotation.y) * 0.05;
+  useFrame((state, delta) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(
+        groupRef.current.rotation.y,
+        mouse.current.x * 0.25,
+        delta * 3
+      );
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(
+        groupRef.current.rotation.x,
+        mouse.current.y * 0.15,
+        delta * 3
+      );
+    }
   });
 
   return (
-    <group ref={groupRef} position={[0, -0.2, 0]}>
-      {/* Laptop Model */}
-      <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.3}>
-        <group position={[-0.4, 0, 0]} rotation={[0.1, 0.35, -0.05]}>
-          {/* Laptop Base Keyboard Deck */}
-          <RoundedBox args={[3.2, 0.12, 2.2]} radius={0.05} smoothness={4}>
-            <meshStandardMaterial color="#1a1c26" metalness={0.8} roughness={0.2} />
+    <group ref={groupRef}>
+      {/* 3D Laptop Device */}
+      <Float speed={2} rotationIntensity={0.2} floatIntensity={0.5}>
+        <group ref={laptopRef} position={[-0.4, -0.2, 0]} rotation={[0.1, 0.2, -0.05]}>
+          <RoundedBox args={[2.8, 0.08, 1.8]} radius={0.03} smoothness={4}>
+            <meshStandardMaterial color="#1a1c23" metalness={0.8} roughness={0.2} />
           </RoundedBox>
-
-          {/* Trackpad */}
-          <mesh position={[0, 0.07, 0.6]}>
-            <planeGeometry args={[0.9, 0.6]} />
-            <meshStandardMaterial color="#11131b" roughness={0.3} metalness={0.5} />
-          </mesh>
-
-          {/* Keyboard Grid */}
-          <mesh position={[0, 0.07, -0.2]}>
-            <planeGeometry args={[2.6, 1.1]} />
-            <meshStandardMaterial color="#0d0e14" roughness={0.8} />
-          </mesh>
-
-          {/* Laptop Display Screen Lid */}
-          <group position={[0, 0.06, -1.05]} rotation={[-0.35, 0, 0]}>
-            <RoundedBox args={[3.2, 2.0, 0.08]} radius={0.04} smoothness={4} position={[0, 1.0, 0]}>
-              <meshStandardMaterial color="#12141d" metalness={0.9} roughness={0.15} />
+          <group position={[0, 0.9, -0.9]} rotation={[-0.15, 0, 0]}>
+            <RoundedBox args={[2.7, 1.7, 0.04]} radius={0.02} smoothness={4}>
+              <meshStandardMaterial color="#0f1117" metalness={0.9} roughness={0.1} />
             </RoundedBox>
-
-            {/* Screen Inner Display */}
-            <mesh position={[0, 1.0, 0.045]}>
-              <planeGeometry args={[3.0, 1.85]} />
-              {screenTex ? (
-                <meshBasicMaterial map={screenTex} />
+            <mesh position={[0, 0, 0.025]}>
+              <planeGeometry args={[2.55, 1.55]} />
+              {screenTexture ? (
+                <meshBasicMaterial map={screenTexture} />
               ) : (
-                <meshBasicMaterial color="#0d0e15" />
+                <meshStandardMaterial color="#191b23" emissive="#4cd7f6" emissiveIntensity={0.2} />
               )}
             </mesh>
           </group>
         </group>
       </Float>
 
-      {/* Futuristic Smartphone Model */}
-      <Float speed={2} rotationIntensity={0.3} floatIntensity={0.5}>
-        <group position={[1.4, -0.2, 0.8]} rotation={[-0.1, -0.4, 0.15]}>
-          {/* Phone Outer Metallic Frame */}
-          <RoundedBox args={[1.1, 2.2, 0.1]} radius={0.12} smoothness={8}>
-            <meshStandardMaterial color="#222533" metalness={0.95} roughness={0.1} />
+      {/* 3D Smartphone Device */}
+      <Float speed={2.5} rotationIntensity={0.3} floatIntensity={0.6}>
+        <group ref={phoneRef} position={[1.3, 0.2, 0.8]} rotation={[-0.1, -0.3, 0.1]}>
+          <RoundedBox args={[0.7, 1.4, 0.06]} radius={0.05} smoothness={4}>
+            <meshStandardMaterial color="#2d303e" metalness={0.85} roughness={0.15} />
           </RoundedBox>
-
-          {/* Phone Display Screen */}
-          <mesh position={[0, 0, 0.052]}>
-            <planeGeometry args={[1.0, 2.1]} />
-            {screenTex ? (
-              <meshBasicMaterial map={screenTex} />
+          <mesh position={[0, 0, 0.032]}>
+            <planeGeometry args={[0.64, 1.32]} />
+            {screenTexture ? (
+              <meshBasicMaterial map={screenTexture} />
             ) : (
-              <meshBasicMaterial color="#0b0c12" />
+              <meshStandardMaterial color="#0d0e15" emissive="#b4c5ff" emissiveIntensity={0.3} />
             )}
-          </mesh>
-
-          {/* Dynamic Island Notch */}
-          <mesh position={[0, 0.92, 0.055]}>
-            <planeGeometry args={[0.3, 0.06]} />
-            <meshBasicMaterial color="#000000" />
           </mesh>
         </group>
       </Float>
 
-      {/* Ambient Lighting */}
-      <ambientLight intensity={0.6} />
+      {/* Ambient & Point Lighting */}
+      <ambientLight intensity={0.7} />
       <directionalLight position={[5, 5, 5]} intensity={1.5} color="#b4c5ff" />
       <pointLight position={[-3, 2, 2]} intensity={2.0} color="#4cd7f6" />
       <pointLight position={[3, -2, -2]} intensity={1.5} color="#ffb596" />
@@ -192,9 +174,13 @@ function DevicesScene({ mouse }: { mouse: React.MutableRefObject<{ x: number; y:
 
 export const Hero3D: React.FC<Hero3DProps> = ({ onOpenResume }) => {
   const [webglSupported, setWebglSupported] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
   const mouse = useRef({ x: 0, y: 0 });
+  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
+    setIsLoaded(true);
+
     try {
       const canvas = document.createElement('canvas');
       const hasWebGL = !!(
@@ -207,8 +193,16 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenResume }) => {
     }
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      const nx = (e.clientX / window.innerWidth) * 2 - 1;
+      const ny = -(e.clientY / window.innerHeight) * 2 + 1;
+      mouse.current.x = nx;
+      mouse.current.y = ny;
+
+      // Parallax mouse translation offset (5-10px smooth depth)
+      setMouseOffset({
+        x: nx * 8,
+        y: ny * 8
+      });
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -219,86 +213,123 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenResume }) => {
     "Hi Shailesh, I reviewed your 3D portfolio and want to discuss hiring you for a project."
   )}`;
 
+  const heroBgUrl = `${import.meta.env.BASE_URL}images/hero-background.webp`;
+  const fallbackBgUrl = `${import.meta.env.BASE_URL}frames/frame_0001.jpg`;
+
   return (
-    <section className="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
+    <section className="relative min-h-screen pt-32 pb-20 flex items-center justify-center overflow-hidden">
+      {/* 1. Main Cinematic Hero Background Frame Image */}
+      <div
+        className={`absolute inset-0 z-0 transition-opacity duration-1000 ease-out ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+        style={{
+          backgroundImage: `url("${heroBgUrl}"), url("${fallbackBgUrl}")`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          transform: `translate3d(${-mouseOffset.x}px, ${-mouseOffset.y}px, 0) scale(1.04)`,
+          transition: 'transform 0.2s ease-out, opacity 1s ease-out',
+          willChange: 'transform, opacity'
+        }}
+      />
+
+      {/* 2. Premium Dark Gradient & Vignette Overlay for Crisp Readability */}
+      <div className="absolute inset-0 z-1 bg-gradient-to-r from-[#070b14]/95 via-[#070b14]/80 to-[#070b14]/55 mix-blend-multiply" />
+      <div className="absolute inset-0 z-1 bg-gradient-to-t from-[#0e131f] via-transparent to-[#0e131f]/70" />
+      <div className="absolute inset-0 z-1 shadow-[inset_0_0_120px_rgba(0,0,0,0.85)] pointer-events-none" />
+
+      {/* 3. Hero Content Container (Placed Above Background) */}
+      <div
+        className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 relative transition-all duration-1000 ease-out transform ${
+          isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+        }`}
+        style={{
+          transform: `translate3d(${mouseOffset.x}px, ${mouseOffset.y}px, 0)`,
+          transition: 'transform 0.2s ease-out'
+        }}
+      >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          {/* Left Column: Hero Text & Information */}
+          {/* LEFT SIDE: Hero Text Content */}
           <div className="lg:col-span-7 space-y-6 text-left">
             
+            {/* Name Eyebrow */}
+            <div className="text-xs font-mono uppercase tracking-[0.25em] text-[#4cd7f6] flex items-center gap-2 font-bold drop-shadow-md">
+              <Sparkles className="w-4 h-4 text-[#ffb596] animate-pulse" />
+              <span>SHAILESH RAVAL</span>
+            </div>
+
             {/* Role Pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#191b23]/80 border border-[#4cd7f6]/30 backdrop-blur-md shadow-glowCyan">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#4cd7f6] animate-ping" />
-              <span className="text-xs font-mono font-semibold tracking-wider text-[#4cd7f6] uppercase">
-                {PERSONAL_INFO.title}
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#161c28]/90 border border-[#2fd9f4]/40 backdrop-blur-xl shadow-[0_0_20px_rgba(47,217,244,0.25)]">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#2fd9f4] animate-ping" />
+              <span className="text-xs sm:text-sm font-mono font-bold tracking-wider text-[#8aebff] uppercase">
+                FULL STACK APP & WEB DEVELOPER
               </span>
             </div>
 
-            {/* Eyebrow */}
-            <div className="text-xs font-mono uppercase tracking-widest text-slate-400 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#ffb596]" />
-              <span>{PERSONAL_INFO.name} — {PERSONAL_INFO.location}</span>
-            </div>
-
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-6xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
-              Building Modern <br className="hidden sm:inline" />
-              <span className="text-gradient">Apps, Websites & AI</span> Solutions
+            <h1 className="text-4xl sm:text-6xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1] drop-shadow-lg">
+              "Building Modern <br className="hidden sm:inline" />
+              <span className="bg-gradient-to-r from-[#8aebff] via-[#2fd9f4] to-[#d0bcff] bg-clip-text text-transparent">
+                Apps, Websites & AI
+              </span>{' '}
+              Solutions."
             </h1>
 
-            {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-300 max-w-2xl font-normal leading-relaxed">
-              Architecting high-performance <strong className="text-white">Flutter mobile apps</strong>,{' '}
-              <strong className="text-white">Next.js 14 web platforms</strong>, and autonomous{' '}
-              <strong className="text-[#4cd7f6]">Google Gemini 2.5 AI agent pipelines</strong> with sub-100ms rendering speed and 60 FPS polish.
+            {/* Subtitle Description */}
+            <p className="text-base sm:text-lg text-slate-300 max-w-2xl font-normal leading-relaxed drop-shadow">
+              Architecting modern, scalable web applications, mobile apps, AI-powered platforms, and enterprise business solutions with sub-100ms response speed and high-end aesthetic polish.
             </p>
 
-            {/* Key Bullet Points */}
+            {/* Key Stack Capabilities */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               {[
-                'Flutter Cross-Platform (iOS & Android)',
-                'Next.js 14 App Router & React 19',
-                'Gemini 2.5 RAG & Autonomous AI Agents',
-                'Sub-100ms Concurrency API Architecture'
+                'Flutter Mobile Apps (iOS & Android)',
+                'Next.js 14 & React 19 Web Systems',
+                'Google Gemini 2.5 AI SDK Agents',
+                'Enterprise Multi-Tenant SaaS Architecture'
               ].map((bullet, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-xs font-medium text-slate-200">
-                  <CheckCircle2 className="w-4 h-4 text-[#4cd7f6] shrink-0" />
+                <div key={idx} className="flex items-center gap-2.5 text-xs font-medium text-slate-200">
+                  <CheckCircle2 className="w-4 h-4 text-[#2fd9f4] shrink-0" />
                   <span>{bullet}</span>
                 </div>
               ))}
             </div>
 
-            {/* CTAs */}
+            {/* Buttons Row */}
             <div className="flex flex-wrap items-center gap-4 pt-4">
+              {/* Hire Me Button */}
               <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#4cd7f6] to-[#b4c5ff] text-[#11131b] font-bold text-sm shadow-glowCyan hover:scale-[1.03] transition-all"
+                className="flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-[#2fd9f4] text-[#001f25] font-code-sm font-bold hover:scale-[1.03] hover:shadow-[0_0_25px_rgba(47,217,244,0.5)] transition-all duration-300"
               >
                 <Phone className="w-4 h-4" />
-                <span>Hire Me on WhatsApp</span>
+                <span>Hire Me</span>
               </a>
 
+              {/* View Projects Button */}
               <a
                 href="#projects"
-                className="flex items-center gap-2 px-6 py-3.5 rounded-xl glass-card text-white font-semibold text-sm hover:border-[#4cd7f6]/50 transition-all"
+                className="flex items-center gap-2.5 px-8 py-3.5 rounded-full border border-[#2fd9f4] text-[#8aebff] font-code-sm font-semibold hover:bg-[#2fd9f4]/15 hover:shadow-[0_0_20px_rgba(47,217,244,0.2)] transition-all duration-300 backdrop-blur-md"
               >
                 <span>View Projects</span>
-                <ArrowRight className="w-4 h-4 text-[#4cd7f6]" />
+                <ArrowRight className="w-4 h-4 text-[#2fd9f4]" />
               </a>
 
+              {/* Download Resume Button */}
               <button
                 onClick={onOpenResume}
-                className="flex items-center gap-2 px-5 py-3.5 rounded-xl glass-panel text-slate-300 font-semibold text-sm hover:bg-white/10 transition-all border border-white/15"
+                className="flex items-center gap-2.5 px-8 py-3.5 rounded-full glass-card text-on-surface hover:text-[#8aebff] font-code-sm transition-all duration-300 border border-white/20"
               >
                 <Download className="w-4 h-4 text-[#ffb596]" />
-                <span>Printable Resume</span>
+                <span>Download Resume</span>
               </button>
             </div>
 
-            {/* Tech Stack Logo Strip */}
+            {/* Core Tech Stack Badges */}
             <div className="pt-6 border-t border-white/10">
               <div className="text-[11px] font-mono text-slate-400 uppercase tracking-widest mb-3">
                 Core Stack Arsenal
@@ -307,7 +338,7 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenResume }) => {
                 {CORE_STACK_LOGOS.map((stack) => (
                   <span
                     key={stack.name}
-                    className="px-3 py-1 rounded-md bg-[#191b23]/90 border border-white/10 text-xs font-mono font-medium text-slate-300 hover:border-[#4cd7f6]/40 transition-colors"
+                    className="px-3 py-1 rounded-md bg-[#161c28]/90 border border-white/15 text-xs font-mono font-medium text-slate-300 hover:border-[#2fd9f4]/40 transition-colors shadow-sm"
                   >
                     {stack.name}
                   </span>
@@ -317,32 +348,32 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenResume }) => {
 
           </div>
 
-          {/* Right Column: Three.js 3D Devices Scene */}
+          {/* RIGHT SIDE: 3D Interactive Telemetry Screen */}
           <div className="lg:col-span-5 h-[460px] sm:h-[520px] w-full relative">
-            <div className="w-full h-full glass-panel rounded-3xl border border-white/15 p-2 overflow-hidden relative shadow-2xl">
+            <div className="w-full h-full glass-card rounded-3xl border border-white/15 p-2 overflow-hidden relative shadow-[0_0_50px_rgba(0,0,0,0.5)]">
               
-              {/* Top Bar Telemetry Controls */}
+              {/* Telemetry Header Badge */}
               <div className="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none">
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#11131b]/80 backdrop-blur-md border border-white/10 text-[10px] font-mono text-[#4cd7f6]">
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#0e131f]/80 backdrop-blur-md border border-white/15 text-[10px] font-mono text-[#8aebff]">
                   <Cpu className="w-3.5 h-3.5 animate-spin" />
                   <span>THREE.JS WEBGL 3D ACTIVE</span>
                 </div>
-                <div className="text-[10px] font-mono text-slate-400 bg-[#11131b]/80 px-3 py-1 rounded-full border border-white/10">
+                <div className="text-[10px] font-mono text-slate-400 bg-[#0e131f]/80 px-3 py-1 rounded-full border border-white/15">
                   60 FPS LERP PHYSICS
                 </div>
               </div>
 
-              {/* Three.js Canvas or CSS Fallback */}
+              {/* Three.js 3D Device Scene */}
               {webglSupported ? (
                 <Canvas gl={{ antialias: true, alpha: true }}>
                   <PerspectiveCamera makeDefault position={[0, 0, 5.2]} fov={45} />
                   <DevicesScene mouse={mouse} />
                 </Canvas>
               ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center bg-gradient-to-b from-[#191b23] to-[#11131b]">
-                  <div className="w-32 h-48 rounded-2xl border-2 border-[#4cd7f6] bg-[#11131b] p-3 shadow-glowCyan animate-float mb-4 flex flex-col justify-between">
-                    <div className="w-12 h-2 bg-[#4cd7f6] rounded-full mx-auto" />
-                    <div className="text-center font-mono text-[10px] text-[#4cd7f6]">
+                <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center bg-gradient-to-b from-[#161c28] to-[#0e131f]">
+                  <div className="w-32 h-48 rounded-2xl border-2 border-[#2fd9f4] bg-[#0e131f] p-3 shadow-glowCyan animate-float mb-4 flex flex-col justify-between">
+                    <div className="w-12 h-2 bg-[#2fd9f4] rounded-full mx-auto" />
+                    <div className="text-center font-mono text-[10px] text-[#8aebff]">
                       FLUTTER & NEXT.JS 14
                     </div>
                     <div className="w-8 h-8 rounded-full bg-white/10 mx-auto flex items-center justify-center">
@@ -355,8 +386,8 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenResume }) => {
                 </div>
               )}
 
-              {/* Bottom Glow Sheen */}
-              <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#11131b] to-transparent pointer-events-none" />
+              {/* Sheen Overlay */}
+              <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#0e131f] to-transparent pointer-events-none" />
             </div>
           </div>
 
