@@ -2,9 +2,10 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: './', // Ensures relative assets work seamlessly on GitHub Pages subfolder deployments
+  base: '/3d-portfolio/', // Explicit GitHub Pages repository path
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
