@@ -234,10 +234,9 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenResume }) => {
         }}
       />
 
-      {/* 2. Premium Dark Gradient & Vignette Overlay for Crisp Readability */}
-      <div className="absolute inset-0 z-1 bg-gradient-to-r from-[#070b14]/95 via-[#070b14]/80 to-[#070b14]/55 mix-blend-multiply" />
-      <div className="absolute inset-0 z-1 bg-gradient-to-t from-[#0e131f] via-transparent to-[#0e131f]/70" />
-      <div className="absolute inset-0 z-1 shadow-[inset_0_0_120px_rgba(0,0,0,0.85)] pointer-events-none" />
+      {/* 2. Crystal Clear Subtle Overlay for Maximum Background Visibility */}
+      <div className="absolute inset-0 z-1 bg-gradient-to-r from-black/50 via-black/25 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 z-1 bg-gradient-to-t from-[#0e131f]/40 via-transparent to-black/20 pointer-events-none" />
 
       {/* 3. Hero Content Container (Placed Above Background) */}
       <div
