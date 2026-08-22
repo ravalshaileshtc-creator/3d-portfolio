@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, FileText, Menu, X, Sparkles, Code2 } from 'lucide-react';
+import { Phone, FileText, Menu, X, Sparkles, Code2, Sun, Moon } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 
 interface NavbarProps {
   onOpenResume: () => void;
+  theme?: 'dark' | 'light';
+  onToggleTheme?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenResume, theme = 'dark', onToggleTheme }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -74,6 +76,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
 
         {/* Action Buttons */}
         <div className="hidden md:flex items-center gap-3">
+          {/* Theme Toggle Button */}
+          {onToggleTheme && (
+            <button
+              onClick={onToggleTheme}
+              className="p-2 rounded-lg border border-white/15 bg-white/5 hover:bg-white/10 text-slate-200 transition-all"
+              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4 text-[#ffb596]" /> : <Moon className="w-4 h-4 text-[#2fd9f4]" />}
+            </button>
+          )}
+
           <button
             onClick={onOpenResume}
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg border border-white/15 bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-200 transition-all"
