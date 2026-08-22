@@ -7,22 +7,26 @@ export default {
   theme: {
     extend: {
       colors: {
-        bgDeep: '#11131b',
-        bgSurface: '#191b23',
-        bgGlass: 'rgba(25, 27, 35, 0.65)',
-        primary: '#b4c5ff',
-        secondary: '#4cd7f6',
-        accent: '#ffb596',
-        borderGlow: 'rgba(255, 255, 255, 0.1)',
+        // 3 Strict Light Colors:
+        // 1. Crisp Light Background (#F8FAFC)
+        // 2. Primary Text & Deep Slate (#0F172A)
+        // 3. Tech Accent Blue (#0284C7)
+        bgDeep: '#F8FAFC',
+        bgSurface: '#FFFFFF',
+        bgGlass: 'rgba(255, 255, 255, 0.85)',
+        primary: '#0F172A',
+        secondary: '#0284C7',
+        accent: '#0284C7',
+        borderGlow: 'rgba(15, 23, 42, 0.08)',
       },
       fontFamily: {
         sans: ['Inter', 'Geist', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       boxShadow: {
-        glowCyan: '0 0 25px rgba(76, 215, 246, 0.25)',
-        glowBlue: '0 0 25px rgba(180, 197, 255, 0.25)',
-        glowPurple: '0 0 35px rgba(168, 85, 247, 0.3)',
+        glowCyan: '0 4px 25px rgba(2, 132, 199, 0.15)',
+        glowBlue: '0 4px 25px rgba(15, 23, 42, 0.10)',
+        glowPurple: '0 4px 35px rgba(2, 132, 199, 0.15)',
       },
       animation: {
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',

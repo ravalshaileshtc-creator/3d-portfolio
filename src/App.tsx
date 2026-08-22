@@ -32,7 +32,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen text-slate-100 bg-transparent selection:bg-[#4cd7f6]/30 selection:text-[#4cd7f6]">
+    <div className="relative min-h-screen text-[#0F172A] bg-[#F8FAFC] selection:bg-[#0284C7]/20 selection:text-[#0284C7]">
       {/* 100-Frame Scroll-Driven Canvas Animation Background */}
       <ScrollFrameBackground />
 
